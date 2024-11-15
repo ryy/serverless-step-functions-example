@@ -1,0 +1,14 @@
+{
+    "name": "serverless-step-functions-example",
+    "version": "1.0.0",
+    "dependencies": {
+        "aws-sdk": "^2.1692.0",
+        "axios": "^1.7.7",
+        "serverless-http": "^3.2.0",
+        "uuid": "^11.0.3"
+    },
+    "devDependencies": {
+        "serverless": "^3.0.0",
+        "serverless-step-functions": "^3.21.1"
+    }
+}
