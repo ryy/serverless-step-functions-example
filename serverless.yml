@@ -4,6 +4,14 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: ap-northeast-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+          Resource:
+            - arn:aws:dynamodb:ap-northeast-1:741233137755:table/MonthlyBillingBatchResults
 
 functions:
   mockApi:
@@ -15,3 +23,19 @@ functions:
   batchApiRequest:
     handler: handlers/billingBatch.handler
     timeout: 900
+
+resources:
+  Resources:
+    MonthlyBillingBatchResultsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: MonthlyBillingBatchResults
+        AttributeDefinitions:
+          - AttributeName: Id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: Id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5

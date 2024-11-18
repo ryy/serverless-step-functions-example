@@ -1,39 +1,39 @@
+// handlers/billingBatch.js
+
+const AWS = require("aws-sdk");
 const axios = require("axios");
+
+// DynamoDBクライアントの設定
+const dynamoDb = new AWS.DynamoDB.DocumentClient({
+  region: "ap-northeast-1",
+});
 
 module.exports.handler = async () => {
   console.log("Starting batch API requests...");
 
   // モックAPIのエンドポイント
-  const mockApiUrl = "https://d0kezi3adb.execute-api.ap-northeast-1.amazonaws.com/dev/api/v1/payments";
+  const mockApiUrl = "https://ij3258zcs7.execute-api.ap-northeast-1.amazonaws.com/dev/api/v1/payments";
 
   const results = [];
   for (let i = 1; i <= 10; i++) {
-    try {
-      console.log(`Request ${i} to ${mockApiUrl}`);
-      const response = await axios.post(mockApiUrl);
+    const response = await axios.post(mockApiUrl);
 
-      results.push({
-        request: i,
-        status: "success",
-        data: response.data,
-      });
-    } catch (error) {
-      console.error(`Request ${i} failed:`, error.message);
-      results.push({
-        request: i,
-        status: "error",
-        message: error.message,
-      });
-    }
+    const params = {
+      TableName: 'MonthlyBillingBatchResults',
+      Item: {
+        Id: `${i}`,
+        Status: "success",
+        PaymentId: response.data.paymentId,
+      },
+    };
+  
+    await dynamoDb.put(params).promise();  
   }
-
-  console.log("Batch requests completed.");
 
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: "Batch API requests completed",
-      results,
+      message: "ok"
     }),
   };
 };

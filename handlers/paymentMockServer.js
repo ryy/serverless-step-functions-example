@@ -1,12 +1,10 @@
-const express = require("express");
-const serverless = require("serverless-http");
+// handlers/paymentMockServer.js
 
-const app = express();
+module.exports.handler = async (event) => {
+  const paymentId = `payment_${Math.random().toString(36).slice(-10)}`;
 
-app.post("/api/v1/payments", (req, res) => {
-  setTimeout(() => {
-    res.json({ message: "Mock response after 1 second" });
-  }, 1000);
-});
-
-module.exports.handler = serverless(app);
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ paymentId }),
+  };
+};
