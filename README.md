@@ -1,21 +1,19 @@
 # serverless-step-functions-example
 
-This project is a Serverless application that includes a monthly billing batch process and a payment mock server. The batch sends multiple requests to the mock API and stores the results in a DynamoDB table.
+このプロジェクトは、毎月の請求バッチプロセスと支払いモックサーバーを含むServerlessアプリケーションです。バッチはモックAPIに複数のリクエストを送信し、結果をDynamoDBのテーブルに保存する。
 
 ## Setup Instructions
 
-1. **Clone the repository**
-   
-   Clone this repository to your local environment.
+1. **リポジトリをクローンする**
 
    ```sh
    git clone <repository-url>
    cd <repository-name>
    ```
 
-2. **Copy environment variables**
+2. **環境変数を設定する**
    
-   Copy `.env.default` to `.env` and fill in your AWS credentials.
+   .env.default`を`.env`にコピーし、AWSの認証情報を入力する。
 
    ```sh
    cp .env.default .env
@@ -28,27 +26,17 @@ This project is a Serverless application that includes a monthly billing batch p
    AWS_DEFAULT_REGION=ap-northeast-1
    ```
 
-   - Update the AWS credentials (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) in the `.env` file.
-
-<!-- 3. **Install dependencies**
+3. **アプリケーションのデプロイ**
    
-   Install the required packages using Yarn.
-
-   ```sh
-   yarn install
-   ``` -->
-
-3. **Deploy the application**
-   
-   Use the Serverless Framework to deploy the application to AWS.
+   Serverless Frameworkを使ってアプリケーションをAWSにデプロイする。
 
    ```sh
    serverless deploy
    ```
 
-   This command will create all necessary AWS resources, including Lambda functions, API Gateway, and DynamoDB.
+   このコマンドを実行すると、Lambda関数、API Gateway、DynamoDBなど、必要なAWSリソースがすべて作成される。
 
-4. **aaaaa**
+4. **関数の実行**
    ```sh
    serverless invoke -f batchApiRequest
    ```

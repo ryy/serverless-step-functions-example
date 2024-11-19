@@ -2,38 +2,43 @@
 
 const AWS = require("aws-sdk");
 const axios = require("axios");
+const { v4: uuidv4 } = require("uuid");
 
-// DynamoDBクライアントの設定
 const dynamoDb = new AWS.DynamoDB.DocumentClient({
   region: "ap-northeast-1",
 });
 
 module.exports.handler = async () => {
-  console.log("Starting batch API requests...");
+  const startTime = Date.now();
+  const mockApiUrl = "https://7u4zjtxpe6.execute-api.ap-northeast-1.amazonaws.com/dev/api/v1/payments";
 
-  // モックAPIのエンドポイント
-  const mockApiUrl = "https://ij3258zcs7.execute-api.ap-northeast-1.amazonaws.com/dev/api/v1/payments";
+  let status = "success";
 
-  const results = [];
-  for (let i = 1; i <= 10; i++) {
-    const response = await axios.post(mockApiUrl);
-
-    const params = {
-      TableName: 'MonthlyBillingBatchResults',
-      Item: {
-        Id: `${i}`,
-        Status: "success",
-        PaymentId: response.data.paymentId,
-      },
-    };
-  
-    await dynamoDb.put(params).promise();  
+  for (let i = 1; i <= 100; i++) {
+    try {
+      await axios.post(mockApiUrl);
+    } catch (error) {
+      status = "error";
+    }
   }
 
+  const params = {
+    TableName: 'MonthlyBillingBatchResults',
+    Item: {
+      Id: uuidv4(),
+      Status: status,
+      Timestamp: new Date().toISOString(),
+    },
+  };
+
+  await dynamoDb.put(params).promise();
+
+  const endTime = Date.now();
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: "ok"
+      result: status,
+      executionTime: `${endTime - startTime} ms`,
     }),
   };
 };
