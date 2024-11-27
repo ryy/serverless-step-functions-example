@@ -1,5 +1,4 @@
 service: test-app
-
 provider:
   name: aws
   runtime: nodejs18.x
@@ -12,18 +11,67 @@ provider:
             - dynamodb:PutItem
           Resource:
             - arn:aws:dynamodb:ap-northeast-1:741233137755:table/MonthlyBillingBatchResults
-
+        - Effect: Allow
+          Action:
+            - states:StartExecution
+          Resource:
+            - "arn:aws:states:ap-northeast-1:741233137755:stateMachine:BillingBatchStateMachine"
 functions:
-  billingBatch:
-    handler: handlers/billingBatch.handler
-    timeout: 900
+  getUsers:
+    handler: handlers/getUsers.handler
+  processPayment:
+    handler: handlers/processPayment.handler
+  saveBatchResult:
+    handler: handlers/saveBatchResult.handler
   paymentMockServer:
     handler: handlers/paymentMockServer.handler
     events:
       - http:
           path: api/v1/payments
           method: post
-
+stepFunctions:
+  stateMachines:
+    billingBatch:
+      name: BillingBatchStateMachine
+      definition:
+        StartAt: GetUsers
+        States:
+          GetUsers:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [getUsers, Arn]
+            Next: ProcessUsers
+          ProcessUsers:
+            Type: Map
+            ItemsPath: "$.users"
+            Iterator:
+              StartAt: ProcessPayment
+              States:
+                ProcessPayment:
+                  Type: Task
+                  Resource:
+                    Fn::GetAtt: [processPayment, Arn]
+                  Catch:
+                    - ErrorEquals: ["States.ALL"]
+                      ResultPath: "$.result"
+                      Next: Error
+                  Next: Success
+                Success:
+                  Type: Pass
+                  Result: { "status": "success" }
+                  End: true
+                Error:
+                  Type: Pass
+                  Result: { "status": "error" }
+                  End: true
+            Next: SaveBatchResult
+          SaveBatchResult:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [saveBatchResult, Arn]
+            Next: Finished
+          Finished:
+            Type: Succeed
 resources:
   Resources:
     MonthlyBillingBatchResultsTable:
@@ -39,3 +87,5 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
+plugins:
+  - serverless-step-functions
