@@ -38,7 +38,7 @@
 
 4. **関数の実行**
    ```sh
-   serverless invoke -f batchApiRequest
+   serverless invoke -f billingBatch
    ```
 
 ## Removing the Application
