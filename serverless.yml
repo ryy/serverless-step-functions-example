@@ -17,10 +17,10 @@ provider:
           Resource:
             - "arn:aws:states:ap-northeast-1:741233137755:stateMachine:BillingBatchStateMachine"
 functions:
-  getUsers:
-    handler: handlers/getUsers.handler
-  processPayment:
-    handler: handlers/processPayment.handler
+  getBillingUsers:
+    handler: handlers/getBillingUsers.handler
+  sendPaymentRequest:
+    handler: handlers/sendPaymentRequest.handler
   saveBatchResult:
     handler: handlers/saveBatchResult.handler
   paymentMockServer:
@@ -34,26 +34,25 @@ stepFunctions:
     billingBatch:
       name: BillingBatchStateMachine
       definition:
-        StartAt: GetUsers
+        StartAt: GetBillingUsers
         States:
-          GetUsers:
+          GetBillingUsers:
             Type: Task
             Resource:
-              Fn::GetAtt: [getUsers, Arn]
+              Fn::GetAtt: [getBillingUsers, Arn]
             Next: ProcessUsers
           ProcessUsers:
             Type: Map
             ItemsPath: "$.users"
             Iterator:
-              StartAt: ProcessPayment
+              StartAt: SendPaymentRequest
               States:
-                ProcessPayment:
+                SendPaymentRequest:
                   Type: Task
                   Resource:
-                    Fn::GetAtt: [processPayment, Arn]
+                    Fn::GetAtt: [sendPaymentRequest, Arn]
                   Catch:
                     - ErrorEquals: ["States.ALL"]
-                      ResultPath: "$.result"
                       Next: Error
                   Next: Success
                 Success:

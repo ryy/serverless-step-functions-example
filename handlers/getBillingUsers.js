@@ -1,4 +1,4 @@
-// handlers/getUsers.js
+// handlers/getBillingUsers.js
 
 const TEST_USER_COUNT = 100;
 
