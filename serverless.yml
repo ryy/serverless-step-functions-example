@@ -10,15 +10,15 @@ provider:
           Action:
             - dynamodb:PutItem
           Resource:
-            - arn:aws:dynamodb:ap-northeast-1:741233137755:table/MonthlyBillingBatchResults
+            - arn:aws:dynamodb:ap-northeast-1:741233137755:table/MonthlyPaymentBatchResults
         - Effect: Allow
           Action:
             - states:StartExecution
           Resource:
-            - "arn:aws:states:ap-northeast-1:741233137755:stateMachine:BillingBatchStateMachine"
+            - "arn:aws:states:ap-northeast-1:741233137755:stateMachine:PaymentBatchStateMachine"
 functions:
-  getBillingUsers:
-    handler: handlers/getBillingUsers.handler
+  getPaymentTargetUsers:
+    handler: handlers/getPaymentTargetUsers.handler
   sendPaymentRequest:
     handler: handlers/sendPaymentRequest.handler
   saveBatchResult:
@@ -31,17 +31,17 @@ functions:
           method: post
 stepFunctions:
   stateMachines:
-    billingBatch:
-      name: BillingBatchStateMachine
+    paymentBatch:
+      name: PaymentBatchStateMachine
       definition:
-        StartAt: GetBillingUsers
+        StartAt: getPaymentTargetUsers
         States:
-          GetBillingUsers:
+          getPaymentTargetUsers:
             Type: Task
             Resource:
-              Fn::GetAtt: [getBillingUsers, Arn]
-            Next: ProcessUsers
-          ProcessUsers:
+              Fn::GetAtt: [getPaymentTargetUsers, Arn]
+            Next: ProcessPaymentTargetUsers
+          ProcessPaymentTargetUsers:
             Type: Map
             ItemsPath: "$.users"
             Iterator:
@@ -73,10 +73,10 @@ stepFunctions:
             Type: Succeed
 resources:
   Resources:
-    MonthlyBillingBatchResultsTable:
+    MonthlyPaymentBatchResultsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: MonthlyBillingBatchResults
+        TableName: MonthlyPaymentBatchResults
         AttributeDefinitions:
           - AttributeName: Id
             AttributeType: S

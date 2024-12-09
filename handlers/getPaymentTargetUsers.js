@@ -1,5 +1,3 @@
-// handlers/getBillingUsers.js
-
 const TEST_USER_COUNT = 100;
 
 module.exports.handler = async () => {

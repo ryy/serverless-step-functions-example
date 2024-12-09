@@ -10,7 +10,7 @@ module.exports.handler = async (event) => {
   const status = hasError ? "error" : "success";
 
   const params = {
-    TableName: "MonthlyBillingBatchResults",
+    TableName: "MonthlyPaymentBatchResults",
     Item: {
       Id: uuidv4(),
       Status: status,

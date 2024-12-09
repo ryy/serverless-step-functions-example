@@ -1,5 +1,3 @@
-// handlers/paymentMockServer.js
-
 module.exports.handler = async (event) => {
   const { userId } = JSON.parse(event.body || "{}");
 
