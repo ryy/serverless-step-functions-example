@@ -4,6 +4,7 @@ RUN apt-get update && apt-get install -y \
     bash \
     curl \
     unzip \
+    less \
     && rm -rf /var/lib/apt/lists/*
 
 RUN ARCH=$(uname -m) && \

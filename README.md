@@ -41,6 +41,11 @@
    serverless invoke -f billingBatch
    ```
 
+   ```
+   aws stepfunctions start-execution \
+    --state-machine-arn arn:aws:states:ap-northeast-1:741233137755:stateMachine:PaymentBatchStateMachine
+   ```
+
 ## Removing the Application
 
 To remove all deployed resources, use the following command:
