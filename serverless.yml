@@ -10,12 +10,12 @@ provider:
           Action:
             - dynamodb:PutItem
           Resource:
-            - arn:aws:dynamodb:ap-northeast-1:741233137755:table/MonthlyPaymentBatchResults
+            - arn:aws:dynamodb:ap-northeast-1:000000000000:table/MonthlyPaymentBatchResults
         - Effect: Allow
           Action:
             - states:StartExecution
           Resource:
-            - "arn:aws:states:ap-northeast-1:741233137755:stateMachine:PaymentBatchStateMachine"
+            - "arn:aws:states:ap-northeast-1:000000000000:stateMachine:PaymentBatchStateMachine"
 functions:
   getPaymentTargetUsers:
     handler: handlers/getPaymentTargetUsers.handler

@@ -1,19 +1,18 @@
 # serverless-step-functions-example
 
-このプロジェクトは、毎月の請求バッチプロセスと支払いモックサーバーを含むServerlessアプリケーションです。バッチはモックAPIに複数のリクエストを送信し、結果をDynamoDBのテーブルに保存する。
+このリポジトリは [AWS Step FunctionsをServerlessで動かしてみた](https://zenn.dev/moshjp/articles/2605c6c2444d73) で使用したソースコードです。
 
-## Setup Instructions
+## セットアップ
 
 1. **リポジトリをクローンする**
 
    ```sh
-   git clone <repository-url>
-   cd <repository-name>
+   git clone git@github.com:ryy/serverless-step-functions-example.git
    ```
 
 2. **環境変数を設定する**
    
-   .env.default`を`.env`にコピーし、AWSの認証情報を入力する。
+   `.env.default` から `.env` ファイルを作成し、AWSの認証情報を入力する
 
    ```sh
    cp .env.default .env
@@ -25,42 +24,35 @@
    AWS_SECRET_ACCESS_KEY=
    AWS_DEFAULT_REGION=ap-northeast-1
    ```
+3. serverless.ymlに自身のAWSアカウントIDを設定する
 
-3. **アプリケーションのデプロイ**
-   
-   Serverless Frameworkを使ってアプリケーションをAWSにデプロイする。
+https://github.com/ryy/serverless-step-functions-example/blob/73c3b910c91082b5de3eea6cfc5ce24fc8aed72e/serverless.yml#L2-L19
 
+## デプロイ
    ```sh
    serverless deploy
    ```
 
-   このコマンドを実行すると、Lambda関数、API Gateway、DynamoDBなど、必要なAWSリソースがすべて作成される。
+> [!NOTE]
+> デプロイが完了するとAPI GatewayのAPIのURLが発行されます。
+> そのURLを以下の定数 `PAYMENT_API_URL` の値と書き換えて再度デプロイをしてください。
 
-4. **関数の実行**
-   ```sh
-   serverless invoke -f billingBatch
-   ```
+https://github.com/ryy/serverless-step-functions-example/blob/73c3b910c91082b5de3eea6cfc5ce24fc8aed72e/handlers/sendPaymentRequest.js#L3-L4
+
+
+## 実行
+   > [!CAUTION]
+   > StepFunctions及びLambdaの実行には無料利用枠が設けられていますが、一定の使用料を超えると利用が発生します。
+   > Lamdda: https://aws.amazon.com/jp/lambda/pricing/
+   > Step Functions: https://aws.amazon.com/jp/step-functions/pricing/
 
    ```
    aws stepfunctions start-execution \
-    --state-machine-arn arn:aws:states:ap-northeast-1:741233137755:stateMachine:PaymentBatchStateMachine
+    --state-machine-arn arn:aws:states:ap-northeast-1:YOUR-AWS-ACCOUNT-ID:stateMachine:PaymentBatchStateMachine
    ```
 
-## Removing the Application
-
-To remove all deployed resources, use the following command:
+## アプリケーションの削除
 
 ```sh
 serverless remove
 ```
-
-This will delete the Lambda functions, API Gateway endpoints, and DynamoDB table created during the deployment process.
-
-## Summary
-
-- **Setup**: Copy environment variables and install dependencies.
-- **Deploy**: Use `serverless deploy` to deploy the application.
-- **Remove**: Use `serverless remove` to delete all AWS resources.
-
-Ensure that you have the AWS CLI configured with appropriate permissions to manage resources in your AWS account.
-

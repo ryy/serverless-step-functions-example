@@ -9,4 +9,3 @@ module.exports.handler = async () => {
     users,
   };
 };
-  
