@@ -18,10 +18,9 @@ cp .env.default .env
 ```
 
 3. serverless.ymlに自身のAWSアカウントIDを設定する
+https://github.com/ryy/serverless-step-functions-example/blob/main/serverless.yml#L12-L13
 
-https://github.com/ryy/serverless-step-functions-example/blob/addb9f40839ebccf3e20e7ac74acda80d9b2cfda/serverless.yml#L12-L13
-
-https://github.com/ryy/serverless-step-functions-example/blob/addb9f40839ebccf3e20e7ac74acda80d9b2cfda/serverless.yml#L17-L18
+https://github.com/ryy/serverless-step-functions-example/blob/main/serverless.yml#L17-L18
 
 
 ## デプロイ
@@ -35,7 +34,7 @@ docker compose run --rm app serverless deploy
 
 <img width="683" src="https://github.com/user-attachments/assets/02be40db-5a85-4fea-9b2f-ce21948b2c26" />
 
-https://github.com/ryy/serverless-step-functions-example/blob/73c3b910c91082b5de3eea6cfc5ce24fc8aed72e/handlers/sendPaymentRequest.js#L3
+https://github.com/ryy/serverless-step-functions-example/blob/main/handlers/sendPaymentRequest.js#L3
 
 
 ## 実行
@@ -45,7 +44,7 @@ https://github.com/ryy/serverless-step-functions-example/blob/73c3b910c91082b5de
 > Step Functions: https://aws.amazon.com/jp/step-functions/pricing/<br/>
 
 Lambdaの実行回数を抑えたい場合は以下の定数の値を変更してください。
-https://github.com/ryy/serverless-step-functions-example/blob/5efd5b57cecff3d23c0baee5b1f86bf23884bf6f/handlers/getPaymentTargetUsers.js#L1
+https://github.com/ryy/serverless-step-functions-example/blob/main/handlers/getPaymentTargetUsers.js#L1
 
 `YOUR-AWS-ACCOUNT-ID`は自身のAWSアカウントIDを指定してください。
 ```
