@@ -34,7 +34,7 @@ https://github.com/ryy/serverless-step-functions-example/blob/addb9f40839ebccf3e
 
 ## デプロイ
 ```sh
-serverless deploy
+docker compose run --rm app serverless deploy
 ```
 
 > [!NOTE]
@@ -60,5 +60,5 @@ aws stepfunctions start-execution \
 ## アプリケーションの削除
 
 ```sh
-serverless remove
+docker compose run --rm app serverless remove
 ```
