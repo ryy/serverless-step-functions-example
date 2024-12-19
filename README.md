@@ -33,6 +33,8 @@ docker compose run --rm app serverless deploy
 > デプロイが完了するとAPI GatewayのAPIのURLが発行されます。<br/>
 > 発行されたURLを以下の定数 `PAYMENT_API_URL` の値と書き換えて再度デプロイをしてください。
 
+<img width="683" src="https://github.com/user-attachments/assets/02be40db-5a85-4fea-9b2f-ce21948b2c26" />
+
 https://github.com/ryy/serverless-step-functions-example/blob/73c3b910c91082b5de3eea6cfc5ce24fc8aed72e/handlers/sendPaymentRequest.js#L3
 
 
