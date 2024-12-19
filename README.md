@@ -13,16 +13,8 @@ git clone git@github.com:ryy/serverless-step-functions-example.git
 2. **環境変数を設定する**
    
 `.env.default` から `.env` ファイルを作成し、AWSの認証情報を入力する
-
 ```sh
 cp .env.default .env
-```
-
-**.env.default**
-```
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_DEFAULT_REGION=ap-northeast-1
 ```
 
 3. serverless.ymlに自身のAWSアカウントIDを設定する
@@ -50,8 +42,10 @@ https://github.com/ryy/serverless-step-functions-example/blob/73c3b910c91082b5de
 > Lambda: https://aws.amazon.com/jp/lambda/pricing/<br/>
 > Step Functions: https://aws.amazon.com/jp/step-functions/pricing/<br/>
 
-- YOUR-AWS-ACCOUNT-IDは自身のAWSアカウントIDを指定してください。
+Lambdaの実行回数を抑えたい場合は以下の定数の値を変更してください。
+https://github.com/ryy/serverless-step-functions-example/blob/5efd5b57cecff3d23c0baee5b1f86bf23884bf6f/handlers/getPaymentTargetUsers.js#L1
 
+`YOUR-AWS-ACCOUNT-ID`は自身のAWSアカウントIDを指定してください。
 ```
 aws stepfunctions start-execution \
    --state-machine-arn arn:aws:states:ap-northeast-1:YOUR-AWS-ACCOUNT-ID:stateMachine:PaymentBatchStateMachine
